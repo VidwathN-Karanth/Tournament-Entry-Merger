@@ -1,0 +1,81 @@
+Tournament Entry Merger
+
+Copyright (c) 2026 Vidwath N Karanth. All rights reserved.
+
+
+TERMS OF USE
+
+1. PERMITTED USE
+
+   You may download, install, and use the Tournament Entry Merger application,
+   free of charge, to prepare entry lists for chess tournaments. This includes
+   use by individual arbiters and organizers, and use in running tournaments
+   whether or not those tournaments charge entry fees.
+
+   You may make copies of the application for your own backup purposes.
+
+2. WHAT IS NOT PERMITTED
+
+   Without prior written permission from the copyright holder, you may not:
+
+   a. copy, publish, distribute, or share the software or its source code;
+   b. modify, adapt, translate, or create derivative works from it;
+   c. sell, rent, lease, sublicense, or otherwise commercialise it, or any
+      work derived from it;
+   d. reverse-engineer, decompile, or disassemble the application, except to
+      the extent this restriction is prohibited by applicable law;
+   e. remove or alter any copyright, authorship, or attribution notice,
+      including the "Developed by Vidwath N Karanth" credit shown in the
+      application; or
+   f. present the software, or any part of it, as your own work.
+
+3. REQUESTING BROADER PERMISSION
+
+   Permission for anything in section 2 is welcomed and considered case by
+   case. This includes, but is not limited to:
+
+   - use or deployment by a chess school, academy, club, or federation;
+   - adapting the software for other registration platforms or file formats;
+   - integrating it into another product or service; and
+   - any commercial use.
+
+   To request permission, open an issue at
+   https://github.com/VidwathN-Karanth/Tournament-Entry-Merger/issues
+   or contact the copyright holder through the GitHub profile
+   https://github.com/VidwathN-Karanth
+
+   Permission granted for one purpose does not extend to any other purpose.
+
+4. NO WARRANTY
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+   The software assists with preparing tournament entry lists. It does not
+   replace verification by the arbiter. You remain responsible for checking
+   the merged output before using it, and for the correctness of any entry
+   list, pairing, or result produced from it.
+
+5. LIMITATION OF LIABILITY
+
+   IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR
+   OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE,
+   ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+   OTHER DEALINGS IN THE SOFTWARE.
+
+6. TERMINATION
+
+   The permission granted in section 1 ends automatically if you breach any
+   term of this licence. On termination you must stop using the software and
+   delete all copies in your possession.
+
+7. THIRD-PARTY COMPONENTS
+
+   This software is built with third-party open-source libraries, including
+   pandas, openpyxl, tkinterdnd2, and PyInstaller. Those libraries remain
+   under their own respective licences, which are not affected by this
+   licence and continue to govern their own use.
+
+
+For permissions and enquiries: https://github.com/VidwathN-Karanth

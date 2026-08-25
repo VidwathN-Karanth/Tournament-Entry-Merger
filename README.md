@@ -6,6 +6,7 @@ Swiss Manager-ready sheet — de-duplicated, and with new entries flagged.**
 ![Windows](https://img.shields.io/badge/platform-Windows-0078D6)
 ![Python](https://img.shields.io/badge/python-3.11%2B-3776AB)
 ![No installer](https://img.shields.io/badge/distribution-single%20.exe-success)
+![Licence](https://img.shields.io/badge/licence-free%20to%20use%2C%20not%20to%20copy-lightgrey)
 
 ![The Tournament Entry Merger window](docs/screenshot.png)
 
@@ -275,8 +276,19 @@ the two exports. Enter them once and correct the spelling at the source.
 
 Developed by **Vidwath N Karanth**.
 
-## License
+## Licence
 
-No licence has been chosen yet. Until a `LICENSE` file is added, default
-copyright applies and others may not reuse this code. Add one — MIT is the
-usual choice for a tool like this — if you want that to change.
+Copyright © 2026 Vidwath N Karanth. All rights reserved.
+
+**Free to use** — arbiters and organizers may download and use the application
+for their tournaments at no cost.
+
+**Not free to copy** — the source code and the application may not be
+redistributed, modified, sold, or reused without written permission.
+
+Permission for anything beyond personal use — a school, academy, club or
+federation deployment, adapting it for other registration platforms, or any
+commercial use — is welcomed and considered case by case. Open an
+[issue](../../issues) to ask.
+
+See [LICENSE](LICENSE) for the full terms.
