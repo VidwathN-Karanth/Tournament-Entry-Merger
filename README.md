@@ -45,27 +45,17 @@ This app does the combining, and remembers who you already entered.
 
 ---
 
-## Getting it
+## Download
 
-### Download
+The application is published on the
+**[Releases](../../releases)** page — download
+`TournamentEntryMerger.exe` and double-click it.
 
-Grab `TournamentEntryMerger.exe` from the
-[Releases](../../releases) page and run it. Nothing to install.
+There is nothing to install: no Python, no setup wizard, no admin rights. It
+runs on Windows 10 and 11 (64-bit).
 
-Windows SmartScreen may warn about an unrecognised publisher the first time —
-the executable is unsigned. Choose *More info → Run anyway*.
-
-### Or build it yourself
-
-```bash
-git clone <your-repo-url>
-cd tournament-entry-merger
-python -m venv .venv
-.venv/Scripts/python.exe -m pip install -r requirements.txt
-.venv/Scripts/python.exe -m PyInstaller build.spec --noconfirm
-```
-
-The executable lands in `dist/`.
+Windows SmartScreen may warn about an unrecognised publisher the first time,
+because the executable is not code-signed. Choose *More info → Run anyway*.
 
 ---
 
