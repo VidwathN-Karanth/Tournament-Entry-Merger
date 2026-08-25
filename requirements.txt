@@ -1,0 +1,5 @@
+pandas>=2.2
+openpyxl>=3.1
+tkinterdnd2>=0.4
+pyinstaller>=6.6
+pillow>=10.0   # only for assets/make_icon.py; not needed at runtime

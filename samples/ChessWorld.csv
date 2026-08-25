@@ -1,0 +1,6 @@
+Name,FIDE ID,AICF ID,KSCA ID,DOB,Gender,Phone,Email,District,State,Category,Amount Paid,Date
+Ravi Kumar,25601234,AICF1001,KSCA501,12-05-2010,M,9876543210,ravi@example.com,Bengaluru Urban,Karnataka,U14,500,05-08-2026 10:15
+Meera Iyer,25607777,AICF1010,KSCA510,18-02-2011,F,9876500020,meera@example.com,Mangaluru,Karnataka,U14,500,03-08-2026 09:00
+Arjun Nair,UNRATED,AICF1004,KSCA504,01-01-2009,M,9876500013,arjun@example.com,Bengaluru Rural,Karnataka,U16,600,07-08-2026 18:40
+Karan Shetty,25608888,,KSCA511,27-03-2008,M,9876500021,karan@example.com,Udupi,Karnataka,U18,600,01-08-2026 12:00
+Nisha Gowda,,,,14-06-2014,F,9876500022,nisha@example.com,Hassan,Karnataka,U10,450,not a date

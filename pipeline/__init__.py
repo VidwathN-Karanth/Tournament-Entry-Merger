@@ -1,0 +1,1 @@
+"""Tournament entry merge pipeline."""

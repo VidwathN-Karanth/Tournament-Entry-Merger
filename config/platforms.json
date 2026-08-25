@@ -1,0 +1,203 @@
+{
+  "output_columns": [
+    "Platform",
+    "Student Name",
+    "FIDE ID",
+    "DOB",
+    "Gender",
+    "Mobile Number",
+    "Email Id",
+    "AICF ID",
+    "KSCA ID",
+    "District",
+    "State",
+    "Category",
+    "Entry Fee",
+    "Payment Date",
+    "Status"
+  ],
+  "status": {
+    "column": "Status",
+    "new_label": "NEW",
+    "existing_label": "ALREADY ENTERED",
+    "new_fill_rgb": "FF9BE7A8",
+    "existing_fill_rgb": "FFF0F0F0"
+  },
+  "output_platform_order": [
+    "chessworld",
+    "circlechess",
+    "chessfee"
+  ],
+  "id_columns": [
+    "FIDE ID",
+    "AICF ID",
+    "KSCA ID"
+  ],
+  "name_column": "Student Name",
+  "placeholder_ids": [
+    "",
+    "-",
+    "--",
+    "0",
+    "00",
+    "000",
+    "n/a",
+    "na",
+    "nil",
+    "none",
+    "null",
+    "unrated",
+    "not available",
+    "aicf id not available",
+    "no aicf id",
+    "aicf id na"
+  ],
+  "platforms": [
+    {
+      "key": "chessfee",
+      "name": "ChessFee",
+      "abbrev": "CF",
+      "ui_color": "#D6E6F7",
+      "ui_border": "#2E6DA4",
+      "fill_rgb": "FFD6E6F7",
+      "sheet": null,
+      "columns": {
+        "Student Name": [
+          "NAME"
+        ],
+        "FIDE ID": [
+          "FIDE_ID"
+        ],
+        "DOB": [
+          "DOB"
+        ],
+        "Gender": [
+          "GENDER"
+        ],
+        "Mobile Number": [
+          "MOBILE_NUMBER"
+        ],
+        "Email Id": [
+          "Email"
+        ],
+        "AICF ID": [
+          "aicfno"
+        ],
+        "KSCA ID": [
+          "tnscano"
+        ],
+        "District": [
+          "DISTRICT"
+        ],
+        "State": [
+          "STATE"
+        ],
+        "Category": [
+          "AGE_CATEGORY"
+        ],
+        "Entry Fee": [
+          "amount"
+        ],
+        "Payment Date": []
+      }
+    },
+    {
+      "key": "chessworld",
+      "name": "ChessWorld",
+      "abbrev": "CW",
+      "ui_color": "#D9EFD9",
+      "ui_border": "#3C763D",
+      "fill_rgb": "FFD9EFD9",
+      "sheet": null,
+      "columns": {
+        "Student Name": [
+          "Name"
+        ],
+        "FIDE ID": [
+          "FIDE ID"
+        ],
+        "DOB": [
+          "DOB"
+        ],
+        "Gender": [
+          "Gender"
+        ],
+        "Mobile Number": [
+          "Phone"
+        ],
+        "Email Id": [
+          "Email"
+        ],
+        "AICF ID": [
+          "AICF ID"
+        ],
+        "KSCA ID": [
+          "KSCA ID"
+        ],
+        "District": [
+          "District"
+        ],
+        "State": [
+          "State"
+        ],
+        "Category": [
+          "Category"
+        ],
+        "Entry Fee": [
+          "Amount Paid"
+        ],
+        "Payment Date": [
+          "Date"
+        ]
+      }
+    },
+    {
+      "key": "circlechess",
+      "name": "CircleChess",
+      "abbrev": "CC",
+      "ui_color": "#FBE3C8",
+      "ui_border": "#B36B00",
+      "fill_rgb": "FFFBE3C8",
+      "sheet": "Participants",
+      "columns": {
+        "Student Name": [
+          "name"
+        ],
+        "FIDE ID": [
+          "fide_id"
+        ],
+        "DOB": [
+          "dob"
+        ],
+        "Gender": [
+          "gender"
+        ],
+        "Mobile Number": [
+          "mobile_number"
+        ],
+        "Email Id": [
+          "email"
+        ],
+        "AICF ID": [
+          "aicf_id"
+        ],
+        "KSCA ID": [
+          "state_id"
+        ],
+        "District": [
+          "district"
+        ],
+        "State": [
+          "state"
+        ],
+        "Category": [
+          "category"
+        ],
+        "Entry Fee": [
+          "amount"
+        ],
+        "Payment Date": []
+      }
+    }
+  ]
+}

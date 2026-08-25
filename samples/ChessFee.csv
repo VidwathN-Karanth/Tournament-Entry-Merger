@@ -1,0 +1,6 @@
+NAME,FIDE_ID,aicfno,tnscano,DOB,GENDER,MOBILE_NUMBER,Email,DISTRICT,STATE,AGE_CATEGORY,amount
+Ravi Kumar,25601234,AICF1001,KSCA501,12-05-2010,M,9876543210,ravi@example.com,Bengaluru Urban,Karnataka,U14,500
+Ananya Rao,-,AICF1002,KSCA502,03-11-2012,F,9876500011,ananya@example.com,Mysuru,Karnataka,U12,500
+Zoya Khan,0,AICF ID not available,-,22-07-2011,F,9876500012,zoya@example.com,Hubballi,Karnataka,U14,500
+Arjun Nair,25609999,AICF1004,KSCA504,01-01-2009,M,9876500013,arjun@example.com,Bengaluru Rural,Karnataka,U16,600
+Bhavya S,N/A,AICF1005,00,09-09-2013,F,9876500014,bhavya@example.com,Tumakuru,Karnataka,U12,500
