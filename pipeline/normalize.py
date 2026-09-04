@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import warnings
 from dataclasses import dataclass
 
 import pandas as pd
@@ -19,6 +20,7 @@ _TRAILING_FLOAT = re.compile(r"^(-?\d+)\.0+$")
 _AMOUNT_JUNK = re.compile(r"[^\d.\-]")
 # Excel hands back ISO timestamps; those are year-first, never day-first.
 _ISO_DATE = re.compile(r"^\d{4}[-/]\d{1,2}[-/]\d{1,2}")
+_DATE_SEP = re.compile(r"[/\-.]")
 
 
 class ShapeError(LoadError):
@@ -62,15 +64,61 @@ def clean_amount(value: object) -> object:
     return int(number) if number.is_integer() else number
 
 
-def parse_date(value: object) -> pd.Timestamp | None:
+def parse_date(value: object, day_first: bool | None = None) -> pd.Timestamp | None:
     text = clean_text(value)
     if not text:
         return None
-    day_first = not _ISO_DATE.match(text)
-    stamp = pd.to_datetime(text, errors="coerce", dayfirst=day_first)
-    if stamp is pd.NaT or pd.isna(stamp):
-        stamp = pd.to_datetime(text, errors="coerce")
+    if day_first is None or _ISO_DATE.match(text):
+        day_first = not _ISO_DATE.match(text)
+    with warnings.catch_warnings():
+        # The column's format is chosen deliberately in infer_day_first;
+        # pandas warning about each value that disagrees is just noise.
+        warnings.simplefilter("ignore", UserWarning)
+        stamp = pd.to_datetime(text, errors="coerce", dayfirst=day_first)
+        if stamp is pd.NaT or pd.isna(stamp):
+            stamp = pd.to_datetime(text, errors="coerce")
     return None if pd.isna(stamp) else stamp
+
+
+def infer_day_first(values) -> bool | None:
+    """Decide whether a whole column is DD/MM or MM/DD.
+
+    A single value like "9/4/2026" is genuinely ambiguous, but a column
+    almost never is: one "31/08" proves day-first, one "8/31" proves
+    month-first. Guessing per value silently mixes the two -- ChessWorld
+    writes M/D/YYYY, so day-first turned 9/4/2026 into 9 April.
+    Returns None when the column gives no evidence either way.
+    """
+    day_first = month_first = 0
+    for value in values:
+        text = clean_text(value)
+        if not text or _ISO_DATE.match(text):
+            continue
+        parts = _DATE_SEP.split(text.split()[0])
+        if len(parts) < 2:
+            continue
+        try:
+            first, second = int(parts[0]), int(parts[1])
+        except ValueError:
+            continue
+        if first > 12:
+            day_first += 1
+        if second > 12:
+            month_first += 1
+
+    if day_first and not month_first:
+        return True
+    if month_first and not day_first:
+        return False
+    return None  # no evidence, or genuinely mixed formats
+
+
+def parse_date_series(values: pd.Series) -> pd.Series:
+    """Parse a date column using one format decided from the whole column."""
+    day_first = infer_day_first(values)
+    if day_first is None:
+        day_first = True  # Indian exports are day-first far more often than not
+    return values.map(lambda v: parse_date(v, day_first))
 
 
 def format_payment(stamp: pd.Timestamp | None) -> str:
@@ -91,6 +139,22 @@ def clean_dob(value: object) -> str:
         return ""
     stamp = parse_date(text)
     return stamp.strftime("%d-%m-%Y") if stamp is not None else text
+
+
+def clean_dob_series(values: pd.Series) -> pd.Series:
+    """Normalize a DOB column, deciding DD/MM vs MM/DD once for the column."""
+    day_first = infer_day_first(values)
+    if day_first is None:
+        day_first = True
+
+    def one(value: object) -> str:
+        text = clean_text(value)
+        if not text:
+            return ""
+        stamp = parse_date(text, day_first)
+        return stamp.strftime("%d-%m-%Y") if stamp is not None else text
+
+    return values.map(one)
 
 
 def resolve_columns(frame: pd.DataFrame, platform: Platform) -> dict[str, str | None]:
@@ -175,7 +239,7 @@ def normalize_frame(
         if canonical in cfg.id_columns:
             out[canonical] = values.map(lambda v: clean_id(v, cfg.placeholder_ids))
         elif canonical == "DOB":
-            out[canonical] = values.map(clean_dob)
+            out[canonical] = clean_dob_series(values)
         elif canonical == "Entry Fee":
             out[canonical] = values.map(clean_amount)
         else:
@@ -183,7 +247,7 @@ def normalize_frame(
 
     date_column = resolved.get(PAYMENT_DATE)
     if date_column is not None:
-        out[DATE_KEY] = frame[date_column].map(parse_date)
+        out[DATE_KEY] = parse_date_series(frame[date_column])
     else:
         out[DATE_KEY] = None
     out[PAYMENT_DATE] = out[DATE_KEY].map(format_payment)

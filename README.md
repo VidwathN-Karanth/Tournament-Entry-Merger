@@ -120,6 +120,9 @@ reinterpret a FIDE ID as a number or an Indian date as an American one.
 | Order within a group | Rows with a payment date first (earliest → latest), then the rest in their original input-file order — never re-sorted by name |
 | Duplicates | Matched on FIDE / AICF / KSCA ID; the first row in the above order wins, so a ChessWorld entry beats a CircleChess one, and within ChessWorld the earliest payment survives |
 | Placeholder IDs | `-`, `0`, `00`, `N/A`, `UNRATED`, `AICF ID not available` and similar are treated as blank before matching; blank never matches blank |
+| Shared IDs | A matching ID does **not** collapse two rows whose dates of birth differ — parents register several children under one ID, and both children paid. Both rows are kept and the pair is listed in the summary |
+| Date formats | `DD/MM` vs `MM/DD` is decided once per column from the whole column, not guessed per value — ChessWorld writes `M/D/YYYY`, ChessFee writes `DD/MM/YYYY` |
+| Awkward `.xlsx` files | Portal exports whose styling openpyxl rejects are read with a fallback reader instead of failing |
 | Status | `NEW` for players absent from the imported previous list; everyone is `NEW` when no list is imported |
 | Players with no ID at all | Compared on name + DOB instead, so they are not flagged new every day |
 | Registration status columns | Ignored — every row in the export is included |
@@ -236,8 +239,9 @@ Redraw the app icon after editing its shape or colours:
 
 ### Built with
 
-Python 3.11+ · pandas · openpyxl · tkinter with tkinterdnd2 · PyInstaller.
-Pillow is used only to draw the icon, never at runtime.
+Python 3.11+ · pandas · openpyxl (with python-calamine as a fallback reader)
+· tkinter with tkinterdnd2 · PyInstaller. Pillow is used only to draw the
+icon, never at runtime.
 
 ---
 
@@ -259,6 +263,10 @@ That platform changed a header name. Correct it in
 **Someone is marked `NEW` who was already entered.**
 They have no usable ID on either side, and their name or DOB differs between
 the two exports. Enter them once and correct the spelling at the source.
+
+**"N pair(s) kept — same ID, different DOB" in the summary.**
+Two players are registered under one ID, usually siblings entered by a parent.
+Both are kept, because both paid. Worth correcting at the registration portal.
 
 ---
 

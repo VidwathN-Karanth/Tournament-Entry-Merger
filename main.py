@@ -11,6 +11,15 @@ import sys
 from pathlib import Path
 
 
+def _calamine_status() -> str:
+    """The reader used for .xlsx files openpyxl refuses to parse."""
+    try:
+        import python_calamine  # noqa: F401
+    except ImportError:
+        return "MISSING - portal exports with odd styling will fail"
+    return "available"
+
+
 def selftest(target: str) -> int:
     import gui
     from pipeline.config import config_path, load_config
@@ -23,6 +32,7 @@ def selftest(target: str) -> int:
         f"platforms        {', '.join(p.abbrev for p in cfg.platform_list)}",
         f"output columns   {len(cfg.output_columns)}",
         f"drag and drop    {'available' if gui.DND_AVAILABLE else 'UNAVAILABLE'}",
+        f"xlsx fallback    {_calamine_status()}",
     ]
     Path(target).write_text("\n".join(lines) + "\n", encoding="utf-8")
     return 0

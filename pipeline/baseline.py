@@ -12,7 +12,7 @@ from pathlib import Path
 import pandas as pd
 
 from .config import Config
-from .loader import LoadError
+from .loader import LoadError, read_workbook
 from .normalize import clean_id, clean_text
 
 
@@ -23,12 +23,19 @@ class Baseline:
     path: Path
     rows: int = 0
     ids: dict[str, set[str]] = field(default_factory=dict)
+    id_dobs: dict[str, dict[str, set[str]]] = field(default_factory=dict)
     fallback_keys: set[tuple[str, str]] = field(default_factory=set)
 
     def contains(self, row_ids: dict[str, str], name: str, dob: str) -> bool:
         for column, value in row_ids.items():
-            if value and value in self.ids.get(column, set()):
-                return True
+            if not value or value not in self.ids.get(column, set()):
+                continue
+            # Siblings registered under one parent's ID: the ID matches but the
+            # player is somebody else, and they still need entering.
+            known = {d for d in self.id_dobs.get(column, {}).get(value, set()) if d}
+            if dob and known and dob not in known:
+                continue
+            return True
         # Nobody can be matched on an ID they do not have, so fall back to
         # name + DOB for rows whose IDs are all blank.
         if not any(row_ids.values()):
@@ -47,10 +54,10 @@ def load_baseline(path: Path | str, cfg: Config) -> Baseline:
             "produced by this app."
         )
 
-    try:
-        frame = pd.read_excel(path, dtype=str, keep_default_na=False)
-    except Exception as exc:
-        raise LoadError(f"{path.name} could not be read: {exc}") from exc
+    book = read_workbook(path)
+    if not book:
+        raise LoadError(f"{path.name} has no sheets.")
+    frame = next(iter(book.values()))
 
     frame.columns = [str(c).strip() for c in frame.columns]
     missing = [c for c in cfg.id_columns if c not in frame.columns]
@@ -73,9 +80,17 @@ def load_baseline(path: Path | str, cfg: Config) -> Baseline:
         else pd.Series([""] * len(frame))
     )
     id_frame = frame[cfg.id_columns].map(lambda v: clean_id(v, cfg.placeholder_ids))
+    for column in cfg.id_columns:
+        baseline.id_dobs[column] = {}
     for position in range(len(frame)):
-        if not any(id_frame.iloc[position]):
+        row = id_frame.iloc[position]
+        if not any(row):
             baseline.fallback_keys.add((names.iloc[position].casefold(), dobs.iloc[position]))
+            continue
+        for column in cfg.id_columns:
+            value = row[column]
+            if value:
+                baseline.id_dobs[column].setdefault(value, set()).add(dobs.iloc[position])
 
     return baseline
 

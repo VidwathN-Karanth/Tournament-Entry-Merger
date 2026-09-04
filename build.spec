@@ -9,7 +9,7 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=datas,
-    hiddenimports=["tkinterdnd2"],
+    hiddenimports=["tkinterdnd2", "python_calamine", "python_calamine._python_calamine"],
     hookspath=[],
     runtime_hooks=[],
     # PIL only draws the icon at build time; nothing imports it at runtime.

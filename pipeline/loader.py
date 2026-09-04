@@ -30,11 +30,33 @@ def _read_csv(path: Path) -> pd.DataFrame:
     raise LoadError(f"{path.name} could not be decoded as text: {last}")
 
 
+def read_workbook(path: Path) -> dict:
+    """Read every sheet of an .xlsx, tolerating workbooks openpyxl chokes on.
+
+    Portals that generate their exports with a non-Excel library often emit
+    style definitions openpyxl rejects outright (a bare <fill/> raises
+    "expected <class 'openpyxl.styles.fills.Fill'>"). The cell values are
+    perfectly fine, so fall back to a reader that ignores styling entirely.
+    """
+    errors = []
+    for engine in (None, "calamine"):
+        try:
+            return pd.read_excel(
+                path,
+                sheet_name=None,
+                dtype=str,
+                keep_default_na=False,
+                **({"engine": engine} if engine else {}),
+            )
+        except ImportError:
+            continue  # calamine not installed in this environment
+        except Exception as exc:
+            errors.append(exc)
+    raise LoadError(f"{path.name} could not be read as a workbook: {errors[0]}")
+
+
 def _read_excel(path: Path, platform: Platform) -> pd.DataFrame:
-    try:
-        book = pd.read_excel(path, sheet_name=None, dtype=str, keep_default_na=False)
-    except Exception as exc:
-        raise LoadError(f"{path.name} could not be read as a workbook: {exc}") from exc
+    book = read_workbook(path)
 
     if not book:
         raise LoadError(f"{path.name} has no sheets.")

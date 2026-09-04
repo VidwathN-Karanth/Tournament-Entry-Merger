@@ -21,12 +21,37 @@ class DuplicateHit:
 
 
 @dataclass
+class SharedId:
+    """One ID that two different players are registered under."""
+
+    column: str
+    value: str
+    names: tuple[str, str]
+    dobs: tuple[str, str]
+
+
+def same_person(dob_a: str, dob_b: str) -> bool:
+    """Whether two rows sharing an ID are really the same player.
+
+    A matching ID normally settles it, but registration portals let a parent
+    enter several children under one ID. Different dates of birth contradict
+    the ID, and two entrants must never collapse into one -- somebody has
+    paid for each. A blank DOB on either side proves nothing, so the ID
+    still decides.
+    """
+    if not dob_a or not dob_b:
+        return True
+    return dob_a == dob_b
+
+
+@dataclass
 class MergeStats:
     rows_by_platform: dict[str, int] = field(default_factory=dict)
     dropped_by_platform: dict[str, int] = field(default_factory=dict)
     dated_rows: int = 0
     undated_rows: int = 0
     duplicates: list[DuplicateHit] = field(default_factory=list)
+    shared_ids: list[SharedId] = field(default_factory=list)
     final_rows: int = 0
     new_rows: int = 0
     existing_rows: int = 0
@@ -82,16 +107,36 @@ def merge(frames: list[pd.DataFrame], cfg: Config) -> tuple[pd.DataFrame, MergeS
     id_values = {col: ordered[col].astype(str).tolist() for col in cfg.id_columns}
     names = ordered[cfg.name_column].astype(str).tolist()
     platforms = ordered["Platform"].astype(str).tolist()
+    dobs = (
+        ordered["DOB"].astype(str).tolist()
+        if "DOB" in ordered.columns
+        else [""] * len(ordered)
+    )
 
     seen: dict[str, dict[str, int]] = {col: {} for col in cfg.id_columns}
     keep: list[int] = []
 
     for position in range(len(ordered)):
         row_ids = {col: id_values[col][position] for col in cfg.id_columns}
-        hit = next(
-            ((col, val) for col, val in row_ids.items() if val and val in seen[col]),
-            None,
-        )
+        hit = None
+        for column, value in row_ids.items():
+            if not value or value not in seen[column]:
+                continue
+            other = seen[column][value]
+            if same_person(dobs[position], dobs[other]):
+                hit = (column, value)
+                break
+            # Same ID, different date of birth: siblings entered under one
+            # parent's ID, or a portal typo. Two real entrants -- keep both.
+            stats.shared_ids.append(
+                SharedId(
+                    column=column,
+                    value=value,
+                    names=(names[other], names[position]),
+                    dobs=(dobs[other], dobs[position]),
+                )
+            )
+
         if hit is not None:
             column, value = hit
             kept_at = seen[column][value]

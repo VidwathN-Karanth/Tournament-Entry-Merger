@@ -470,6 +470,20 @@ class App:
         if output:
             lines.append(f"\nSaved to {output}")
 
+        if stats.shared_ids:
+            lines.append("")
+            lines.append(
+                f"Shared IDs    {len(stats.shared_ids)} pair(s) kept "
+                "- same ID, different DOB:"
+            )
+            for shared in stats.shared_ids[:6]:
+                lines.append(
+                    f"  {shared.names[0]} / {shared.names[1]} "
+                    f"({shared.column} {shared.value})"
+                )
+            if len(stats.shared_ids) > 6:
+                lines.append(f"  ... and {len(stats.shared_ids) - 6} more")
+
         if result.baseline_error:
             lines.append(f"\nPrevious list not used: {result.baseline_error}")
         for report in result.warnings:

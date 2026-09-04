@@ -85,6 +85,14 @@ def main(argv: list[str] | None = None) -> int:
     else:
         print(f"{'Status':<12} {stats.new_rows:>5} NEW (no previous list given)")
 
+    for shared in stats.shared_ids:
+        print(
+            f"NOTE   {shared.names[0]} and {shared.names[1]} share "
+            f"{shared.column} {shared.value} but differ in DOB "
+            f"({shared.dobs[0]} / {shared.dobs[1]}) - both kept",
+            file=sys.stderr,
+        )
+
     if args.report:
         for hit in stats.duplicates:
             print(
